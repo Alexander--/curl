@@ -408,6 +408,8 @@ CURL_EXTERN CURLMcode curl_multi_assign(CURLM *multi_handle,
                                         curl_socket_t sockfd, void *sockp);
 
 
+CURL_EXTERN int multi_getsock(struct Curl_easy *data, curl_socket_t *socks, int numsocks);
+
 /*
  * Name: curl_push_callback
  *

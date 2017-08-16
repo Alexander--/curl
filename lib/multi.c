@@ -850,7 +850,7 @@ static int domore_getsock(struct connectdata *conn,
 }
 
 /* returns bitmapped flags for this handle and its sockets */
-static int multi_getsock(struct Curl_easy *data,
+int multi_getsock(struct Curl_easy *data,
                          curl_socket_t *socks, /* points to numsocks number
                                                   of sockets */
                          int numsocks)
