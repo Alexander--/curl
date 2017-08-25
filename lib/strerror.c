@@ -89,6 +89,7 @@ curl_easy_strerror(CURLcode error)
   case CURLE_REMOTE_ACCESS_DENIED:
     return "Access denied to remote resource";
 
+#ifndef CURL_DISABLE_FTP
   case CURLE_FTP_ACCEPT_FAILED:
     return "FTP: The server failed to connect to data port";
 
@@ -110,20 +111,32 @@ curl_easy_strerror(CURLcode error)
   case CURLE_FTP_CANT_GET_HOST:
     return "FTP: can't figure out the host in the PASV response";
 
-  case CURLE_HTTP2:
-    return "Error in the HTTP2 framing layer";
-
   case CURLE_FTP_COULDNT_SET_TYPE:
     return "FTP: couldn't set file type";
-
-  case CURLE_PARTIAL_FILE:
-    return "Transferred a partial file";
 
   case CURLE_FTP_COULDNT_RETR_FILE:
     return "FTP: couldn't retrieve (RETR failed) the specified file";
 
+  case CURLE_FTP_PORT_FAILED:
+    return "FTP: command PORT failed";
+
+  case CURLE_FTP_COULDNT_USE_REST:
+    return "FTP: command REST failed";
+
+  case CURLE_FTP_BAD_FILE_LIST:
+    return "Unable to parse FTP file list";
+#endif
+
+  case CURLE_HTTP2:
+    return "Error in the HTTP2 framing layer";
+
+  case CURLE_PARTIAL_FILE:
+    return "Transferred a partial file";
+
+#if !defined(CURL_DISABLE_FTP) && !defined(CURL_DISABLE_TFTP)
   case CURLE_QUOTE_ERROR:
     return "Quote command returned error";
+#endif
 
   case CURLE_HTTP_RETURNED_ERROR:
     return "HTTP response code said error";
@@ -143,12 +156,6 @@ curl_easy_strerror(CURLcode error)
   case CURLE_OPERATION_TIMEDOUT:
     return "Timeout was reached";
 
-  case CURLE_FTP_PORT_FAILED:
-    return "FTP: command PORT failed";
-
-  case CURLE_FTP_COULDNT_USE_REST:
-    return "FTP: command REST failed";
-
   case CURLE_RANGE_ERROR:
     return "Requested range was not delivered by the server";
 
@@ -164,11 +171,16 @@ curl_easy_strerror(CURLcode error)
   case CURLE_FILE_COULDNT_READ_FILE:
     return "Couldn't read a file:// file";
 
+#ifndef CURL_DISABLE_LDAP
   case CURLE_LDAP_CANNOT_BIND:
     return "LDAP: cannot bind";
 
   case CURLE_LDAP_SEARCH_FAILED:
     return "LDAP: search failed";
+
+  case CURLE_LDAP_INVALID_URL:
+    return "Invalid LDAP URL";
+#endif
 
   case CURLE_FUNCTION_NOT_FOUND:
     return "A required function in the library was not found";
@@ -188,8 +200,10 @@ curl_easy_strerror(CURLcode error)
   case CURLE_UNKNOWN_OPTION:
     return "An unknown option was passed in to libcurl";
 
+#ifndef CURL_DISABLE_TELNET
   case CURLE_TELNET_OPTION_SYNTAX :
     return "Malformed telnet option";
+#endif
 
   case CURLE_PEER_FAILED_VERIFICATION:
     return "SSL peer certificate or SSH remote key was not OK";
@@ -228,9 +242,6 @@ curl_easy_strerror(CURLcode error)
   case CURLE_BAD_CONTENT_ENCODING:
     return "Unrecognized or bad HTTP Content or Transfer-Encoding";
 
-  case CURLE_LDAP_INVALID_URL:
-    return "Invalid LDAP URL";
-
   case CURLE_FILESIZE_EXCEEDED:
     return "Maximum file size exceeded";
 
@@ -252,14 +263,12 @@ curl_easy_strerror(CURLcode error)
   case CURLE_LOGIN_DENIED:
     return "Login denied";
 
+#ifndef CURL_DISABLE_TFTP
   case CURLE_TFTP_NOTFOUND:
     return "TFTP: File Not Found";
 
   case CURLE_TFTP_PERM:
     return "TFTP: Access Violation";
-
-  case CURLE_REMOTE_DISK_FULL:
-    return "Disk full or allocation exceeded";
 
   case CURLE_TFTP_ILLEGAL:
     return "TFTP: Illegal operation";
@@ -267,11 +276,15 @@ curl_easy_strerror(CURLcode error)
   case CURLE_TFTP_UNKNOWNID:
     return "TFTP: Unknown transfer ID";
 
-  case CURLE_REMOTE_FILE_EXISTS:
-    return "Remote file already exists";
-
   case CURLE_TFTP_NOSUCHUSER:
     return "TFTP: No such user";
+#endif
+
+  case CURLE_REMOTE_DISK_FULL:
+    return "Disk full or allocation exceeded";
+
+  case CURLE_REMOTE_FILE_EXISTS:
+    return "Remote file already exists";
 
   case CURLE_CONV_FAILED:
     return "Conversion failed";
@@ -282,20 +295,21 @@ curl_easy_strerror(CURLcode error)
   case CURLE_REMOTE_FILE_NOT_FOUND:
     return "Remote file not found";
 
+#ifdef USE_LIBSSH2
   case CURLE_SSH:
     return "Error in the SSH layer";
+#endif
 
   case CURLE_AGAIN:
     return "Socket not ready for send/recv";
 
+#ifndef CURL_DISABLE_RTSP
   case CURLE_RTSP_CSEQ_ERROR:
     return "RTSP CSeq mismatch or invalid CSeq";
 
   case CURLE_RTSP_SESSION_ERROR:
     return "RTSP session error";
-
-  case CURLE_FTP_BAD_FILE_LIST:
-    return "Unable to parse FTP file list";
+#endif
 
   case CURLE_CHUNK_FAILED:
     return "Chunk callback failed";
